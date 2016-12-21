@@ -82,7 +82,7 @@ namespace IdentityServer4Demo.OauthServer
 
             app.UseFacebookAuthentication(new FacebookOptions
             {
-                AuthenticationScheme = "Facbook",
+                AuthenticationScheme = "Facebook",
                 DisplayName = "Facebook",
                 SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
 
