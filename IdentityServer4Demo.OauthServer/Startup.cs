@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using IdentityServer4;
+using IdentityServer4Demo.OauthServer.DbContexts;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace IdentityServer4Demo.OauthServer
 {
@@ -20,10 +22,13 @@ namespace IdentityServer4Demo.OauthServer
             var connectionString = @"Server=DESKTOP-ACOU86Q\SQLEXPRESS;Database=IdentityServerDemo4OauthServer;Trusted_Connection=True;MultipleActiveResultSets=true";
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            // configure identity server with in-memory users, but EF stores for clients and resources
+            // configure identity server, but EF stores for clients and resources
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddIdentityServer()
                 .AddTemporarySigningCredential()
-                .AddInMemoryUsers(Users.GetUsers())
+                .AddAspNetIdentity<IdentityUser>()
                 .AddConfigurationStore(builder =>
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)))
@@ -44,6 +49,7 @@ namespace IdentityServer4Demo.OauthServer
           
             app.UseStaticFiles();
 
+            app.UseIdentity();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
