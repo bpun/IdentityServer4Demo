@@ -19,6 +19,9 @@ using IdentityServer4.Stores;
 using Host.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using IdentityServer4Demo.OauthServer.Models;
+using Microsoft.Extensions.Logging;
 
 namespace IdentityServer4.Quickstart.UI.Controllers
 {
@@ -31,22 +34,77 @@ namespace IdentityServer4.Quickstart.UI.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private SignInManager<IdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
+        private ILogger<AccountController> _logger;
 
         public AccountController(
           UserManager<IdentityUser> userManager,
+          SignInManager<IdentityUser> signInManager,
           IIdentityServerInteractionService interaction,
-          IClientStore clientStore)
+          IClientStore clientStore,
+          ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _interaction = interaction;
             _clientStore = clientStore;
+            _logger = loggerFactory.CreateLogger<AccountController>();
+        }
+        
+        /// <summary>
+        /// show register page
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        // GET: /Account/Register
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
         }
 
         /// <summary>
-        /// Show login page
+        /// register user
         /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+                    // Send an email with this link
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                    //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation(3, "User created a new account with password.");
+                    return RedirectToLocal(returnUrl);
+                }
+                AddErrors(result);
+            }
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+            /// <summary>
+            /// Show login page
+            /// </summary>
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
@@ -98,7 +156,7 @@ namespace IdentityServer4.Quickstart.UI.Controllers
                     {
                         return Redirect(model.ReturnUrl);
                     }
-                    return Redirect("~/");
+                    return RedirectToAction("Index","Home");
                 }
 
                 ModelState.AddModelError("", "Invalid username or password.");
@@ -307,5 +365,27 @@ namespace IdentityServer4.Quickstart.UI.Controllers
 
             return Redirect("~/");
         }
+
+        #region Helpers
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+        }
+        #endregion
     }
 }

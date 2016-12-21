@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 namespace IdentityServer4.Quickstart.UI.Controllers
 {
     [SecurityHeaders]
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly IIdentityServerInteractionService _interaction;
@@ -27,6 +26,10 @@ namespace IdentityServer4.Quickstart.UI.Controllers
             return View();
         }
 
+        public IActionResult Home()
+        {
+            return View();
+        }
         /// <summary>
         /// Shows the error page
         /// </summary>

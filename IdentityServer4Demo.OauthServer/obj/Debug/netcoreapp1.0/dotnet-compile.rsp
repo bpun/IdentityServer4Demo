@@ -238,6 +238,7 @@ C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.O
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Migrations\20161221033906_InitialIdentityServerMigration.cs
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Migrations\20161221033906_InitialIdentityServerMigration.Designer.cs
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Migrations\ApplicationDbContextModelSnapshot.cs
+C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Models\ApplicationUser.cs
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Models\ConsentInputModel.cs
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Models\ConsentViewModel.cs
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Models\ErrorViewModel.cs
@@ -245,3 +246,4 @@ C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.O
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Models\LoginInputModel.cs
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Models\LoginViewModel.cs
 C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Models\LogoutViewModel.cs
+C:\Users\Bpun_Ekbana\Desktop\Bpun@Temp\IdentityServer4Demo\IdentityServer4Demo.OauthServer\Models\RegisterViewModel.cs

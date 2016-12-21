@@ -87,8 +87,8 @@ namespace IdentityServer4Demo.OauthServer
                 SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
 
 
-                AppId = "1730733333911445",
-                AppSecret = "bc351eda8444fafcc8f2109c8dd46fde"
+                AppId = "224801881295183",
+                AppSecret = "fb6982c70d322e07ce31e458821b16c5"
             });
 
 
@@ -98,7 +98,7 @@ namespace IdentityServer4Demo.OauthServer
                 routes.MapRoute(
                 name: "default_route",
                 template: "{controller}/{action}/{id?}",
-                defaults: new { controller = "Account", action = "login" }
+                defaults: new { controller = "Home", action = "Home" }
                 );
             });
         }
