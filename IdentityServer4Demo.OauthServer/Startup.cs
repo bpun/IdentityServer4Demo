@@ -10,11 +10,32 @@ using Microsoft.IdentityModel.Tokens;
 using IdentityServer4;
 using IdentityServer4Demo.OauthServer.DbContexts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace IdentityServer4Demo.OauthServer
 {
     public class Startup
     {
+        //public Startup(IHostingEnvironment env)
+        //{
+        //    var builder = new ConfigurationBuilder()
+        //        .SetBasePath(env.ContentRootPath)
+        //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        //        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+        //        .AddEnvironmentVariables();
+
+        //    Configuration = builder.Build();
+        //    Environment = env;
+        //    if (env.IsDevelopment())
+        //    {
+        //        // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+        //        builder.AddUserSecrets();
+        //    }
+        //}
+
+        //private IConfigurationRoot Configuration { get; set; }
+        //private IHostingEnvironment Environment { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -46,31 +67,31 @@ namespace IdentityServer4Demo.OauthServer
             {
                 app.UseDeveloperExceptionPage();
             }
-          
-            app.UseStaticFiles();
 
             app.UseIdentity();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationScheme = "Cookies"
+                AuthenticationScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
+                AutomaticAuthenticate = false,
+                AutomaticChallenge = false
             });
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+           // JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
-            {
-                AuthenticationScheme = "oidc",
-                SignInScheme = "Cookies",
+            //app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
+            //{
+            //    AuthenticationScheme = "oidc",
+            //    SignInScheme = "Cookies",
 
-                Authority = "http://localhost:5000",
-                RequireHttpsMetadata = false,
+            //    Authority = "http://localhost:5000",
+            //    RequireHttpsMetadata = false,
 
-                ClientId = "mvc",
-                SaveTokens = true
-            });
+            //    ClientId = "mvc",
+            //    SaveTokens = true
+            //});
 
-            app.UseGoogleAuthentication(new GoogleOptions
+            app.UseGoogleAuthentication(new GoogleOptions()
             {
                 AuthenticationScheme = "Google",
                 DisplayName = "Google",
@@ -80,18 +101,18 @@ namespace IdentityServer4Demo.OauthServer
                 ClientSecret = "3gcoTrEDPPJ0ukn_aYYT6PWo"
             });
 
-            app.UseFacebookAuthentication(new FacebookOptions
-            {
-                AuthenticationScheme = "Facebook",
-                DisplayName = "Facebook",
-                SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
+            //app.UseFacebookAuthentication(new FacebookOptions
+            //{
+            //    AuthenticationScheme = "Facebook",
+            //    DisplayName = "Facebook",
+            //    SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
 
 
-                AppId = "224801881295183",
-                AppSecret = "fb6982c70d322e07ce31e458821b16c5"
-            });
+            //    AppId = "224801881295183",
+            //    AppSecret = "fb6982c70d322e07ce31e458821b16c5"
+            //});
 
-
+            app.UseStaticFiles();
             //  app.UseIdentityServer();
             app.UseMvc(routes =>
             {
